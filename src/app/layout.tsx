@@ -12,11 +12,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     include: {
       boards: {
         include: {
-          tasks: true,
+          columns: { include: { tasks: true } },
         },
       },
     },
   });
+  console.log(user);
 
   return (
     <html lang="fr" data-theme={user?.theme ?? "dracula"}>
