@@ -4,9 +4,13 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useState } from "react";
 import Column from "./Column";
 import { Column as ColumnI, Task } from "@prisma/client";
+import { updateTask } from "utils/requests";
+import TrashCan from "./TrashCan";
+import { deleteTask } from "utils/requests";
 
 export default function DragArea({ board }) {
   const [boardData, setBoardData] = useState(board);
+  resetServerContext();
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -30,42 +34,69 @@ export default function DragArea({ board }) {
 
     const newTasksSource = Array.from(columnSource.tasks);
 
-    const tmp = newTasksSource.find((task: Task) => task.id.toString() === draggableId);
+    const tmpTask: Task = newTasksSource.find((task: Task) => task.id.toString() === draggableId);
 
     newTasksSource.splice(source.index, 1);
     if (sameColumn) {
-      newTasksSource.splice(destination.index, 0, tmp);
+      newTasksSource.splice(destination.index, 0, tmpTask);
     }
 
     const newColumnSource = { ...columnSource, tasks: newTasksSource };
-    console.log(newColumnSource);
+
+    let newColumnDestination = null;
 
     // // DESTINATION
-    const columnDestination = boardData.columns.find((col: ColumnI) => col.id.toString() === destination.droppableId);
+    if (destination.droppableId !== "trash") {
+      const columnDestination = boardData.columns.find((col: ColumnI) => col.id.toString() === destination.droppableId);
 
-    const newTasksDestination = Array.from(columnDestination.tasks);
-    const newColumnDestination = { ...columnDestination, tasks: newTasksDestination };
-
-    if (!sameColumn) {
-      newTasksDestination.splice(destination.index, 0, tmp);
+      const newTasksDestination = Array.from(columnDestination.tasks);
+      newColumnDestination = { ...columnDestination, tasks: newTasksDestination };
+      if (!sameColumn) {
+        tmpTask.columnId = newColumnDestination.id;
+        newTasksDestination.splice(destination.index, 0, tmpTask);
+      }
     }
 
-    const noChangeColumns = boardData.columns.filter(
-      (col: ColumnI) => col.id !== newColumnSource.id && col.id !== newColumnDestination.id
-    );
+    const noChangeColumns = boardData.columns.filter((col: ColumnI) => {
+      if (newColumnDestination) {
+        if (col.id !== newColumnSource.id && col.id !== newColumnDestination.id) {
+          return col;
+        }
+      } else {
+        if (col.id !== newColumnSource.id) {
+          return col;
+        }
+      }
+    });
 
-    const newColumn = [...noChangeColumns, newColumnSource, newColumnDestination];
-    console.log(newColumn.sort((a, b) => a.id - b.id));
+    const newColumn =
+      sameColumn || newColumnDestination === null
+        ? [...noChangeColumns, newColumnSource]
+        : [...noChangeColumns, newColumnSource, newColumnDestination];
+
+    console.log(newColumn);
+
+    newColumn.sort((a, b) => a.id - b.id);
 
     setBoardData({ ...board, columns: newColumn });
+
+    //TRASH ?
+    if (destination.droppableId === "trash") {
+      console.log("in trash");
+
+      deleteTask(tmpTask);
+      return;
+    }
+    updateTask(tmpTask);
   };
 
   return (
-    <section className="flex flex-row justify-around w-full mt-10">
+    <section className="flex flex-row justify-around w-full mt-10 relative">
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
         {boardData.columns.map((col: ColumnI) => (
           <Column column={col} key={col.id} />
         ))}
+        <TrashCan />
       </DragDropContext>
     </section>
   );

@@ -17,7 +17,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       },
     },
   });
-  console.log(user);
 
   return (
     <html lang="fr" data-theme={user?.theme ?? "dracula"}>

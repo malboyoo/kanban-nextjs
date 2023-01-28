@@ -15,7 +15,7 @@ export default function BoardComponent({ board }) {
       >
         <div className="card-body flex flex-col items-center">
           <h2 className="card-title">{board.name}</h2>
-          <hr className="border w-full" />
+          {/* <hr className="border w-full" /> */}
           {board.describe && <p>{board.describe}</p>}
         </div>
       </div>
