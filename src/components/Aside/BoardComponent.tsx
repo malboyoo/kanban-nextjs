@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 
 export default function BoardComponent({ board }) {
   const url = usePathname();
-  console.log(url);
 
   return (
     <Link href={`/board/${board.id}`}>
