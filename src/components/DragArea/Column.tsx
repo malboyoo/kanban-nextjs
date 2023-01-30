@@ -1,8 +1,9 @@
 "use client";
 import Task from "./Task";
 import { Droppable } from "react-beautiful-dnd";
+import AddTask from "./AddTask";
 
-export default function Column({ column }) {
+export default function Column({ column, boardData }) {
   return (
     <div className="flex flex-col items-center card w-64 bg-base-100 shadow-xl min-h-[400px]">
       <h3 className=" text-2xl text-center font-semibold p-4 bg-base-200 w-full rounded-t-xl ">{column.name}</h3>
@@ -22,6 +23,7 @@ export default function Column({ column }) {
           </ul>
         )}
       </Droppable>
+      <AddTask column={column} boardData={boardData} />
     </div>
   );
 }

@@ -94,7 +94,7 @@ export default function DragArea({ board }) {
     <section className="flex flex-row justify-around w-full mt-10 relative">
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
         {boardData.columns.map((col: ColumnI) => (
-          <Column column={col} key={col.id} />
+          <Column column={col} key={col.id} boardData={[boardData, setBoardData]} />
         ))}
         <TrashCan />
       </DragDropContext>

@@ -28,3 +28,15 @@ export async function deleteTask(task: Task) {
     },
   });
 }
+
+export async function addTask(task: Partial<Task>) {
+  const response = await fetch("/api/task", {
+    method: "POST",
+    body: JSON.stringify(task),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = response.json();
+  return data;
+}
