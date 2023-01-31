@@ -11,7 +11,7 @@ export default async function page({ params }) {
 
   return (
     <main className="bg-base-300 h-fit flex flex-col justify-start items-center">
-      <h2 className="text-3xl text-accent opacity-60 mt-5">{board.name}</h2>
+      <h2 className="text-3xl font-semibold text-secondary-focus opacity-60 mt-5">{board.name}</h2>
       <DragArea board={board} />
     </main>
   );

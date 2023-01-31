@@ -4,17 +4,18 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id, columnId } = req.body;
+  const { id, columnId, content, priority } = req.body;
 
   if (req.method === "PUT") {
     try {
-      await prisma.task.update({
+      const response = await prisma.task.update({
         where: { id: id },
         data: {
           columnId: columnId,
+          content: content,
         },
       });
-      res.status(200).json({ message: "task updated sucessfully" });
+      res.status(200).json(response);
     } catch (error) {
       res.status(400).json({ message: "database error:", error });
     }
@@ -31,7 +32,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const response = await prisma.task.create({
         data: {
-          ...req.body,
+          columnId: columnId,
+          content: content,
+          priority: priority,
         },
       });
       console.log(response);

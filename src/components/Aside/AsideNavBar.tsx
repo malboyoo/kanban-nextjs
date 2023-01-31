@@ -1,5 +1,6 @@
 import { Board } from "@prisma/client";
 import BoardComponent from "./BoardComponent";
+import CreateBoard from "./CreateBoard";
 
 export default function AsideNavBar({ boards }: { boards: Board[] }) {
   return (
@@ -8,6 +9,7 @@ export default function AsideNavBar({ boards }: { boards: Board[] }) {
       {boards.map((board: Board) => (
         <BoardComponent board={board} key={board.id} />
       ))}
+      <CreateBoard />
     </aside>
   );
 }

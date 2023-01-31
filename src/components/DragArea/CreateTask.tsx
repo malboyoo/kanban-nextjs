@@ -2,26 +2,30 @@
 
 import { Column, Task } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { addTask } from "utils/requests";
+import { addTask, updateTask } from "utils/requests";
 
-export default function CreateTask({ setActive, column, boardData }) {
+export default function CreateTask({ setActive, column, boardData, edit = false, task = null }) {
   const [board, setBoardData] = boardData;
 
   async function handleSubmit(value: string) {
+    console.log(edit);
+
     const newTask = {
+      id: task ? task.id : null,
       columnId: column.id,
       content: value,
       priority: 1,
     };
-    const data: Task = await addTask(newTask);
+    const data: Task = edit ? await updateTask(newTask) : await addTask(newTask);
 
     const newColumns = board.columns.map((col: Column) => {
-      if (col.id === data.columnId) {
+      if (col.id === data.columnId && edit) {
+        col.tasks.find((el: Task) => el.id === data.id).content = data.content;
+      } else if (col.id === data.columnId) {
         col.tasks = [...col.tasks, data];
       }
       return col;
     });
-    console.log({ ...board, columns: newColumns });
 
     setBoardData({ ...board, columns: newColumns });
   }
@@ -38,7 +42,7 @@ export default function CreateTask({ setActive, column, boardData }) {
           onSubmit={(event: any) => {
             event.preventDefault();
             const taskContent: string = event.target.content.value;
-            handleSubmit(event.target.content.value);
+            handleSubmit(taskContent);
             setActive(false);
           }}
         >
@@ -47,7 +51,7 @@ export default function CreateTask({ setActive, column, boardData }) {
           </label>
           <textarea
             name="content"
-            defaultValue=""
+            defaultValue={edit ? task.content : ""}
             className="rounded-2xl overflow-hidden p-4 resize-none text-lg w-full my-5"
           ></textarea>
           <div className="flex justify-center gap-10 my-5">
@@ -61,7 +65,7 @@ export default function CreateTask({ setActive, column, boardData }) {
               cancel
             </button>
             <button className="btn btn-outline btn-success" type="submit">
-              Create
+              {edit ? "Edit" : "Create"}
             </button>
           </div>
         </form>

@@ -9,14 +9,16 @@ export async function changeTheme(inputElement: MutableRefObject<HTMLInputElemen
   });
 }
 
-export async function updateTask(task: Task) {
-  await fetch("/api/task", {
+export async function updateTask(task: Partial<Task>) {
+  const response = await fetch("/api/task", {
     method: "PUT",
     body: JSON.stringify(task),
     headers: {
       "Content-Type": "application/json",
     },
   });
+  const data = response.json();
+  return data;
 }
 
 export async function deleteTask(task: Task) {

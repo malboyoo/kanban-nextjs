@@ -8,7 +8,7 @@ export default function AddTask({ column, boardData }) {
     <>
       <button
         onClick={() => setActive(true)}
-        className="text-xl py-2 w-5/6 mt-10 mb-5 border-dashed text-slate-500 border-slate-500 border-2 rounded-xl "
+        className="text-xl py-2 w-5/6 my-3 border-dashed text-slate-500 border-slate-500 border-2 rounded-xl "
       >
         <span className="mr-4 ">Add task</span>
         <i className="fa-regular fa-square-plus"></i>
