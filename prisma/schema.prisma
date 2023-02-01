@@ -20,7 +20,7 @@ model User {
 
 model Board {
   id        Int      @id @default(autoincrement())
-  author    User   @relation(fields: [authorId], references: [id])
+  author    User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
   name      String 
   describe  String?
@@ -30,15 +30,16 @@ model Board {
 
 model Column {
   id        Int      @id @default(autoincrement())
+  index     Int
   name      String
-  board     Board   @relation(fields: [boardId], references: [id])
+  board     Board   @relation(fields: [boardId], references: [id], onDelete: Cascade)
   boardId   Int
   tasks     Task[]
 }
 
 model Task {
   id         Int      @id @default(autoincrement())
-  column     Column @relation(fields: [columnId], references: [id])
+  column     Column @relation(fields: [columnId], references: [id], onDelete: Cascade)
   columnId   Int
   content    String
   priority   Int

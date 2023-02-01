@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       res.status(200).json({ message: "task deleted sucessfully" });
     } catch (error) {
-      res.status(400).json({ message: "database error:", error });
+      res.status(400).json({ message: error.message });
     }
   } else if (req.method === "POST") {
     try {
@@ -37,11 +37,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           priority: priority,
         },
       });
-      console.log(response);
 
       res.status(200).json(response);
     } catch (error) {
-      res.status(400).json({ message: "database error:", error });
+      res.status(400).json({ message: error.message });
     }
   } else {
     res.status(400).json({ message: "Wrong method" });

@@ -12,15 +12,16 @@ CREATE TABLE "Board" (
     "authorId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "describe" TEXT,
-    CONSTRAINT "Board_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Board_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
 CREATE TABLE "Column" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "index" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "boardId" INTEGER NOT NULL,
-    CONSTRAINT "Column_boardId_fkey" FOREIGN KEY ("boardId") REFERENCES "Board" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Column_boardId_fkey" FOREIGN KEY ("boardId") REFERENCES "Board" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -29,7 +30,7 @@ CREATE TABLE "Task" (
     "columnId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
     "priority" INTEGER NOT NULL,
-    CONSTRAINT "Task_columnId_fkey" FOREIGN KEY ("columnId") REFERENCES "Column" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Task_columnId_fkey" FOREIGN KEY ("columnId") REFERENCES "Column" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateIndex

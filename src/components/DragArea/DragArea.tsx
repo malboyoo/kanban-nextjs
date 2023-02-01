@@ -11,6 +11,7 @@ import { deleteTask } from "utils/requests";
 export default function DragArea({ board }) {
   const [boardData, setBoardData] = useState(board);
   resetServerContext();
+  console.log(boardData);
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -93,9 +94,11 @@ export default function DragArea({ board }) {
   return (
     <section className="flex flex-row justify-around w-full mt-10 relative">
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-        {boardData.columns.map((col: ColumnI) => (
-          <Column column={col} key={col.id} boardData={[boardData, setBoardData]} />
-        ))}
+        {boardData.columns
+          .sort((a: ColumnI, b: ColumnI) => a.index - b.index)
+          .map((col: ColumnI) => (
+            <Column column={col} key={col.id} boardData={[boardData, setBoardData]} />
+          ))}
         <TrashCan />
       </DragDropContext>
     </section>

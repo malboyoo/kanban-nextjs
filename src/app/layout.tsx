@@ -23,7 +23,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head />
       <body className="flex flex-col flex-auto bg-base-300">
         <div className="app-container flex flex-auto">
-          <AsideNavBar boards={user.boards} />
+          <AsideNavBar boards={user.boards} userId={user.id} />
           <div className="flex-col flex-auto">
             <Header user={user} />
             {children}

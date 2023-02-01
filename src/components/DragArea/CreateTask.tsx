@@ -8,8 +8,6 @@ export default function CreateTask({ setActive, column, boardData, edit = false,
   const [board, setBoardData] = boardData;
 
   async function handleSubmit(value: string) {
-    console.log(edit);
-
     const newTask = {
       id: task ? task.id : null,
       columnId: column.id,
