@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { addBoard, updateBoard } from "utils/requests";
+import { addBoard, updateBoard, deleteBoard } from "utils/requests";
 
 export default function CreateBoard({ active, setActive, edit = false, board = null, userId }) {
   const router = useRouter();
@@ -18,6 +18,13 @@ export default function CreateBoard({ active, setActive, edit = false, board = n
       await addBoard(newBoard);
     }
     router.refresh();
+  }
+
+  async function handclickDelete() {
+    await deleteBoard(board);
+    router.push("/");
+    router.refresh();
+    // aller a l'index
   }
 
   return (
@@ -47,6 +54,18 @@ export default function CreateBoard({ active, setActive, edit = false, board = n
             className="rounded-2xl overflow-hidden p-4 resize-none text-lg w-full my-5"
           ></input>
           <div className="flex justify-center gap-10 my-5">
+            {edit && (
+              <button
+                className="btn btn-outline btn-error"
+                onClick={() => {
+                  event.preventDefault();
+                  handclickDelete();
+                  setActive(false);
+                }}
+              >
+                Delete
+              </button>
+            )}
             <button
               className="btn btn-outline btn-error"
               onClick={(event) => {

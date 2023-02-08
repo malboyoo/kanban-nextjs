@@ -66,3 +66,13 @@ export async function updateBoard(board: Partial<Board>) {
   const data = response.json();
   return data;
 }
+
+export async function deleteBoard(board) {
+  await fetch("/api/board", {
+    method: "DELETE",
+    body: JSON.stringify(board),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

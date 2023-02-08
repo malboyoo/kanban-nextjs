@@ -47,5 +47,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
+  } else if (req.method === "DELETE") {
+    try {
+      const deletedBoard = await prisma.board.delete({
+        where: { id: id },
+      });
+
+      res.status(200).json(deletedBoard);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  } else {
+    res.status(400).json({ message: "incorrect request method" });
   }
 }
